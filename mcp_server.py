@@ -29,8 +29,18 @@ async def bridge_ai_sales_assistant(query: str) -> str:
     return json.dumps(result)
 
 # 4. Generate the bulletproof ASGI application directly from FastMCP
-# This auto-maps perfectly compliant routes without custom Starlette scaffolding.
-app = mcp.sse_app()
+fastmcp_app = mcp.sse_app()
+
+from fastapi import FastAPI
+app = FastAPI(title="Bridge AI Dedicated MCP Server")
+
+@app.get("/")
+def root_health_check():
+    """Railway requires a successful 200 response on the root URL to not crash."""
+    return {"status": "online", "message": "Bridge AI MCP Server running. Endpoint at /sse"}
+
+# Mount the MCP server onto the FastAPI root
+app.mount("/", fastmcp_app)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
