@@ -36,13 +36,9 @@ class QueryInput(BaseModel):
 # ----------------------------
 
 async def process_query(query: str):
-    # 1. Detect intent
     best_intent, confidence, stage = engine.detect_intent(query)
-
-    # 2. Build response
     response_text, relevance = build_response(best_intent, confidence)
 
-    # 3. Format output
     return {
         "response": response_text,
         "intent_detected": best_intent.get("intent_id") if best_intent else "none",
@@ -69,9 +65,11 @@ async def bridge_ai_sales_assistant(
 # API ROUTES (for testing)
 # ----------------------------
 
+# 🔥 HEALTH CHECK (important for Railway)
 @app.get("/")
 def home():
-    return {"status": "Bridge AI MCP API running"}
+    return "ok"
+
 
 @app.post("/mcp-test")
 async def test_api(input: QueryInput):
@@ -94,5 +92,4 @@ if __name__ == "__main__":
             port=int(os.environ.get("PORT", 8000)),
         )
     else:
-        # Default = MCP mode
         mcp.run()
