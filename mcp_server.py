@@ -57,6 +57,15 @@ async def handle_call_tool(name: str, arguments: dict | None) -> list[TextConten
 # The SSE Transport requires maintaining a mapping of transports to sessions
 sse_transport = None
 
+@app.get("/")
+def health_check():
+    """Simple health check endpoint for the root URL"""
+    return {
+        "status": "online", 
+        "service": "Bridge AI Dedicated MCP Server", 
+        "mcp_endpoint": "/mcp"
+    }
+
 @app.get("/mcp")
 async def handle_mcp_sse(request: Request):
     """
