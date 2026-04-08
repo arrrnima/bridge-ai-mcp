@@ -9,8 +9,9 @@ from response_builder import build_response
 engine = IntentEngine()
 
 # 2. Initialize the Official FastMCP Server
-# FastMCP handles all the complex streaming SSE handshakes automatically.
-mcp = FastMCP("Bridge AI MCP Server")
+# We explicitly set host="0.0.0.0" to prevent "Invalid Host header" errors.
+# We also explicitly force sse_path="/mcp" to meet Smithery's exact requirements.
+mcp = FastMCP("Bridge AI MCP Server", host="0.0.0.0", sse_path="/mcp")
 
 # 3. Define the single tool exposed to the Agent
 @mcp.tool()
@@ -37,7 +38,7 @@ app = FastAPI(title="Bridge AI Dedicated MCP Server")
 @app.get("/")
 def root_health_check():
     """Railway requires a successful 200 response on the root URL to not crash."""
-    return {"status": "online", "message": "Bridge AI MCP Server running. Endpoint at /sse"}
+    return {"status": "online", "message": "Bridge AI MCP Server running. Endpoint strictly locked to /mcp"}
 
 # Mount the MCP server onto the FastAPI root
 app.mount("/", fastmcp_app)
