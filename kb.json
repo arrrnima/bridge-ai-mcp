@@ -1,4 +1,4 @@
-\{
+{
   "intents": [
     {
       "intent_id": "ai_visibility",
@@ -15,13 +15,13 @@
       ],
       "user_questions": [
         "Why is my website not visible to AI agents?",
-        "Why is my website not visible to AI agents?",
         "Why is my website not showing in ChatGPT?",
         "Why can't ChatGPT find my website?",
         "Why is my site invisible to AI?",
         "Why are AI tools ignoring my website?",
         "Why is my website not appearing in AI search?",
-        "Why is my content not picked up by AI?""How do I get my site to show up in ChatGPT?",
+        "Why is my content not picked up by AI?",
+        "How do I get my site to show up in ChatGPT?",
         "Why aren't AI bots picking up my content?"
       ],
       "core_problem": "Websites are built for search engines, not AI systems.",
