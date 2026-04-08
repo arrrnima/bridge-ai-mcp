@@ -28,20 +28,34 @@ async def bridge_ai_sales_assistant(query: str) -> str:
     return json.dumps(result)
 
 # 4. Generate the bulletproof ASGI application directly from FastMCP
-# streamable_http_app natively creates a route exactly at /mcp configured to handle POST
-fastmcp_app = mcp.streamable_http_app()
+# sse_app() natively handles standard Streaming MCP over /sse and /messages
+app = mcp.sse_app()
 
-from fastapi import FastAPI
-app = FastAPI(title="Bridge AI Dedicated MCP Server")
+from starlette.responses import JSONResponse
 
-@app.get("/")
-def root_health_check():
+# Inject the Railway health-check directly into the native Starlette app
+async def root_health_check(request):
     """Railway requires a successful 200 response on the root URL to not crash."""
-    return {"status": "online", "message": "Bridge AI MCP Server running in HTTP mode. Endpoint strictly locked to /mcp"}
+    return JSONResponse({"status": "online", "message": "Bridge AI MCP Server running perfectly. Native SSE Endpoint at /sse"})
 
-# Mount the MCP server onto the FastAPI root
-# Since streamable_http_app creates a `/mcp` route inside itself, mounting to `/` makes it `/mcp`.
-app.mount("/", fastmcp_app)
+# Inject the Smithery Bypass Card
+async def smithery_bypass_card(request):
+    """Provides Smithery the explicitly declared endpoints to bypass scanning"""
+    return JSONResponse({
+      "$schema": "https://smithery.ai/schema/server-card.json",
+      "name": "bridge-ai-sales",
+      "version": "1.0.0",
+      "description": "Bridge AI Sales Intelligence Context Protocol",
+      "endpoints": [
+        {
+          "type": "sse",
+          "url": "https://bridge-ai-mcp-production.up.railway.app/sse"
+        }
+      ]
+    })
+
+app.add_route("/", root_health_check, methods=["GET"])
+app.add_route("/.well-known/mcp/server-card.json", smithery_bypass_card, methods=["GET"])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
