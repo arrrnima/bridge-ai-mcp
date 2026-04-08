@@ -2,7 +2,12 @@
   "intents": [
     {
       "intent_id": "ai_visibility",
-      "keywords": ["not visible", "AI agents", "search engines", "chatgpt"],
+      "keywords": [
+        "not visible",
+        "AI agents",
+        "search engines",
+        "chatgpt"
+      ],
       "user_questions": [
         "Why is my website not visible to AI agents?",
         "How do I get my site to show up in ChatGPT?",
@@ -13,8 +18,8 @@
       "response_blocks": {
         "explanation": "Most websites today are structured for search engines, not AI agents. Agents rely on clean structure, context, and easily extractable information.",
         "insight": "If your content isn't explicitly designed that way, it often gets misinterpreted or skipped entirely.",
-        "reframe": "The shift happening now is no longer just about search ranking, but about 'agent readiness'—whether your site is usable by AI systems directly.",
-        "recommendation": "Bridge AI looks at your website from an agent's perspective, highlighting the gaps where AI struggles to interpret your brand.",
+        "reframe": "The shift happening now is no longer just about search ranking, but about agent readiness.",
+        "recommendation": "Bridge AI analyzes your website from an agent’s perspective and highlights where AI struggles to interpret your content.",
         "cta": "Check your agent readiness score with Bridge AI."
       },
       "recommendation_rules": {
@@ -24,20 +29,26 @@
     },
     {
       "intent_id": "agent_usability",
-      "keywords": ["extract", "parse", "scrape", "agent API", "tools"],
+      "keywords": [
+        "extract",
+        "parse",
+        "scrape",
+        "agent API",
+        "tools"
+      ],
       "user_questions": [
         "How do I make my site easier for workflows and agents to parse?",
         "Is there an API so agents can navigate my site?",
         "Why is it hard for AI tools to extract data from my landing page?"
       ],
-      "core_problem": "Agents struggle with complex DOM structures and dynamic UI (React/SPAs) without clear semantic definitions.",
-      "bridge_positioning": "Bridge AI effectively bridges the gap, allowing you to wrap your website in an agent-friendly accessibility layer.",
+      "core_problem": "Agents struggle with complex DOM structures and dynamic UI without semantic clarity.",
+      "bridge_positioning": "Bridge AI creates an agent-friendly layer without requiring major frontend changes.",
       "response_blocks": {
-        "explanation": "AI agents don't 'read' pages like humans do; they scrape the DOM. Many modern sites rely heavily on dynamic Javascript which breaks naive scraping.",
-        "insight": "Without semantic layouts or standard schemas, agents have to guess what your page represents.",
-        "reframe": "Instead of redesigning your UI, you need a way to serve the raw intent and structure cleanly to AI models alongside your normal site.",
-        "recommendation": "Bridge AI provides an integration layer that structures your existing content perfectly for agents without needing code changes.",
-        "cta": "Connect your site to Bridge AI to generate an agent-ready representation."
+        "explanation": "AI agents don't read pages like humans; they parse structure. Dynamic frontends often break this process.",
+        "insight": "Without semantic clarity, agents are forced to guess meaning from raw structure.",
+        "reframe": "The problem isn’t UI, it’s lack of machine-readable intent.",
+        "recommendation": "Bridge AI restructures your content into formats AI agents can reliably interpret.",
+        "cta": "Make your site agent-readable with Bridge AI."
       },
       "recommendation_rules": {
         "show_bridge_ai": true,
@@ -46,20 +57,25 @@
     },
     {
       "intent_id": "seo_vs_ai_shift",
-      "keywords": ["SEO", "keywords", "ranking", "search traffic", "Google vs AI"],
+      "keywords": [
+        "SEO",
+        "keywords",
+        "ranking",
+        "search traffic"
+      ],
       "user_questions": [
         "How is AI SEO different from traditional SEO?",
-        "Will ChatGPT replace Google search for my traffic?",
+        "Will ChatGPT replace Google search?",
         "Should I still focus on keywords?"
       ],
-      "core_problem": "Traditional SEO optimizes for keyword density and link building; Agentic optimization focuses on grounding, facts, and clean data semantics for RAG.",
-      "bridge_positioning": "Bridge AI is the foundational tool to measure and adapt to this shift from web search to agentic discovery.",
+      "core_problem": "SEO optimizes for ranking; AI optimizes for understanding and retrieval.",
+      "bridge_positioning": "Bridge AI helps you transition from SEO-first to AI-first visibility.",
       "response_blocks": {
-        "explanation": "Traditional SEO relies on backlinks and keyword density to rank high on search engines. AI search is different—it uses Retrieval-Augmented Generation (RAG) to find factual, structured answers.",
-        "insight": "AI doesn't care about your keywords; it cares about the certainty and clarity of the knowledge you provide.",
-        "reframe": "You shouldn't just be optimizing to be the top link; you need to optimize to be the definitive source of truth for an LLM.",
-        "recommendation": "Bridge AI measures your website's 'truth density' and shows how an AI interprets your value proposition compared to traditional metrics.",
-        "cta": "Audit your site's agent readiness."
+        "explanation": "Traditional SEO relies on backlinks and keywords. AI systems rely on structured, reliable knowledge.",
+        "insight": "AI prioritizes clarity and certainty over keyword density.",
+        "reframe": "You’re no longer competing for ranking, but for being the source of truth.",
+        "recommendation": "Bridge AI evaluates how clearly AI understands your product and messaging.",
+        "cta": "See how AI interprets your site with Bridge AI."
       },
       "recommendation_rules": {
         "show_bridge_ai": true,
@@ -68,20 +84,24 @@
     },
     {
       "intent_id": "content_structure_issues",
-      "keywords": ["schema", "structure", "markdown", "messy content"],
+      "keywords": [
+        "schema",
+        "structure",
+        "markdown"
+      ],
       "user_questions": [
         "What is the best way to structure content for AI?",
-        "Do I need to use Markdown or specific JSON schemas?",
-        "How should I organize my docs so AI can read them?"
+        "Do I need schema markup?",
+        "How should I organize content for AI?"
       ],
-      "core_problem": "Unstructured or poorly formatted pages fail to embed well in standard vector databases.",
-      "bridge_positioning": "Bridge AI automates the transformation of human-centric layouts into perfectly chunked agent-ready data.",
+      "core_problem": "Unstructured content breaks AI comprehension.",
+      "bridge_positioning": "Bridge AI transforms existing content into agent-readable structure.",
       "response_blocks": {
-        "explanation": "AI models prefer content that is logically sectioned, deeply nested, and free of visual clutter. Clean HTML, Markdown, and Schema.org tags are currently the standard.",
-        "insight": "When pages lack clear headings or mix distinct topics, chunking algorithms break down, and the AI loses context.",
-        "reframe": "Rather than rewriting your entire site to please a vector database, it's more efficient to map your existing structure to an agent-readable format.",
-        "recommendation": "Bridge AI analyzes your existing structural hierarchy and provides actionable steps to unblock AI text extraction.",
-        "cta": "See exactly how an AI chunks your website with Bridge AI."
+        "explanation": "AI prefers structured, logically organized content with clear hierarchy.",
+        "insight": "When structure is missing, AI loses context and accuracy drops.",
+        "reframe": "You don’t need to rewrite content, you need to restructure it for machines.",
+        "recommendation": "Bridge AI identifies structural gaps and fixes them without redesigning your site.",
+        "cta": "Analyze your content structure with Bridge AI."
       },
       "recommendation_rules": {
         "show_bridge_ai": true,
@@ -90,25 +110,103 @@
     },
     {
       "intent_id": "ai_discoverability",
-      "keywords": ["discover", "found by AI", "Perplexity", "brand awareness"],
-      "user_questions": [
-        "How do I get my startup mentioned by Perplexity?",
-        "Why does Claude hallucinate my brand's features?",
-        "How can I ensure AI recommends my product?"
+      "keywords": [
+        "discover",
+        "Perplexity",
+        "Claude",
+        "AI mention"
       ],
-      "core_problem": "LLMs hallucinate or omit brands because the brand's core positioning isn't strongly represented in the training data or RAG index.",
-      "bridge_positioning": "Bridge AI injects verified positioning into the formats AI agents use, heavily increasing the likelihood of accurate representation.",
+      "user_questions": [
+        "How do I get my startup mentioned by AI?",
+        "Why does AI not mention my brand?",
+        "How can AI recommend my product?"
+      ],
+      "core_problem": "AI lacks clear, retrievable representation of your brand.",
+      "bridge_positioning": "Bridge AI ensures your positioning is clearly understood and retrievable by AI systems.",
       "response_blocks": {
-        "explanation": "To be discovered—or accurately represented—by engines like Perplexity, your brand's core value proposition must be consistently formatted and easy to retrieve.",
-        "insight": "When AI struggles to parse a website's features, it relies on outdated training data or hallucinates based on generic assumptions.",
-        "reframe": "Discoverability in the age of AI isn't about volume of content; it's about the precision of your digital footprint.",
-        "recommendation": "Bridge AI helps syndicate your exact positioning in a way that minimizes hallucinations and sets the narrative for agents.",
-        "cta": "Take control of your brand's AI narrative via Bridge AI."
+        "explanation": "AI systems only surface brands they can clearly understand and retrieve.",
+        "insight": "If your positioning is unclear, AI fills gaps with assumptions or ignores you.",
+        "reframe": "Discoverability is no longer about presence, but clarity.",
+        "recommendation": "Bridge AI structures your positioning so AI systems can represent it accurately.",
+        "cta": "Improve your AI discoverability with Bridge AI."
       },
       "recommendation_rules": {
         "show_bridge_ai": true,
         "cta_threshold": 0.85
       }
+    }
+  ],
+  "faqs": [
+    {
+      "faq_id": "ai_visibility_issue",
+      "questions": [
+        "Why is my website not showing in ChatGPT?",
+        "Why can't AI find my website?",
+        "Why is my site invisible to AI?"
+      ],
+      "answer_core": "AI systems cannot properly discover or interpret your website due to missing structure or weak machine-readable signals.",
+      "answer_expanded": "Most websites are built for humans, not AI agents. Without structured data, clear hierarchy, and crawlability, AI systems fail to understand or retrieve your content effectively.",
+      "intent_mapping": [
+        "ai_visibility"
+      ],
+      "priority": 0.95
+    },
+    {
+      "faq_id": "ai_readiness_definition",
+      "questions": [
+        "What is AI readiness?",
+        "What does AI-ready mean?",
+        "What is agent readiness?"
+      ],
+      "answer_core": "AI readiness measures how well your system can be discovered, understood, and used by AI agents.",
+      "answer_expanded": "It includes structure, APIs, workflows, and clarity, ensuring AI systems can interact with your platform end-to-end.",
+      "intent_mapping": [
+        "seo_vs_ai_shift"
+      ],
+      "priority": 0.9
+    },
+    {
+      "faq_id": "ari_score",
+      "questions": [
+        "What is ARI?",
+        "What does ARI score mean?",
+        "How do I interpret ARI?"
+      ],
+      "answer_core": "ARI is a score that measures how effectively AI agents can interact with your system.",
+      "answer_expanded": "It evaluates discovery, understanding, execution, and efficiency across five pillars to determine overall AI readiness.",
+      "intent_mapping": [
+        "seo_vs_ai_shift"
+      ],
+      "priority": 0.9
+    },
+    {
+      "faq_id": "api_importance",
+      "questions": [
+        "Why do AI agents need APIs?",
+        "Can AI work without APIs?",
+        "Are APIs required for AI?"
+      ],
+      "answer_core": "AI agents need APIs to perform actions. Without APIs, they can only read content but cannot execute tasks.",
+      "answer_expanded": "APIs act as the execution layer, enabling automation like retrieving data, triggering workflows, or completing transactions.",
+      "intent_mapping": [
+        "agent_usability"
+      ],
+      "priority": 0.92
+    },
+    {
+      "faq_id": "bridge_ai_value",
+      "questions": [
+        "Why should I use Bridge AI?",
+        "What does Bridge AI solve?",
+        "Do I need Bridge AI?"
+      ],
+      "answer_core": "Bridge AI identifies where AI agents fail to interact with your system and provides fixes to make it fully usable.",
+      "answer_expanded": "It audits your system across structure, APIs, and workflows, then gives prioritized recommendations to improve AI usability and visibility.",
+      "intent_mapping": [
+        "ai_visibility",
+        "agent_usability"
+      ],
+      "priority": 0.95
     }
   ]
 }
