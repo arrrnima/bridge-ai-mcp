@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
@@ -30,6 +31,7 @@ def handle_query(input: QueryInput):
     }
 
 if __name__ == "__main__":
-    # Start the standard REST API on port 8000
-    print("Starting Bridge AI REST Server API on port 8000...", flush=True)
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Start the standard REST API dynamically based on Railway's assigned port
+    port = int(os.environ.get("PORT", 8000))
+    print(f"Starting Bridge AI REST Server API on port {port}...", flush=True)
+    uvicorn.run(app, host="0.0.0.0", port=port)
