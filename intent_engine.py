@@ -1,5 +1,6 @@
 import os
 import json
+import functools
 from kb_loader import load_kb
 
 class IntentEngine:
@@ -112,6 +113,7 @@ If no intent strongly matches, use "none" for intent_id."""
             print(f"Groq classification failed: {e}")
             return None, -1.0 # signal fallback
 
+    @functools.lru_cache(maxsize=1000)
     def detect_intent(self, query: str):
         kb_data = load_kb(self.kb_path)
         intents = kb_data.get("intents", [])
