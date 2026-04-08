@@ -9,8 +9,15 @@ from response_builder import build_response
 engine = IntentEngine()
 
 # 2. Initialize the Official FastMCP Server
-# Host MUST be 0.0.0.0 so we don't trigger "401 Unauthorized" or "Invalid Host" from Smithery Origin
-mcp = FastMCP("Bridge AI MCP Server", host="0.0.0.0")
+from mcp.server.transport_security import TransportSecuritySettings
+
+# A. Disable the strict Cloudflare origin-blocking mechanism that causes Smithery to 403 Forbidden
+security = TransportSecuritySettings(
+    enable_dns_rebinding_protection=False,
+    allowed_origins=["https://smithery.ai"]
+)
+
+mcp = FastMCP("Bridge AI MCP Server", host="0.0.0.0", transport_security=security)
 
 # 3. Define the single tool exposed to the Agent
 @mcp.tool()
@@ -30,16 +37,16 @@ async def bridge_ai_sales_assistant(query: str) -> str:
 
 # 4. Generate the bulletproof ASGI application directly from FastMCP
 # Smithery natively requires streamable_http_app for public publishing.
+# B. Switch to streamable HTTP per Smithery's absolute required proxy constraints
 app = mcp.streamable_http_app()
 
 from starlette.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 
-# CRITICAL SECURITY FIX: Smithery sends `OPTIONS` preflight headers before connecting.
-# Without CORS middleware explicitly handling `OPTIONS`, Starlette throws HTTP 405 Method Not Allowed.
+# C. Disable the strict Starlette preflight handling that causes Smithery to 405 Method Not Allowed on OPTIONS
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-# Inject the Smithery Bypass Card referencing the HTTP context
+# Inject the Smithery Bypass Card explicitly as an HTTP type
 async def smithery_bypass_card(request):
     return JSONResponse({
       "$schema": "https://smithery.ai/schema/server-card.json",
