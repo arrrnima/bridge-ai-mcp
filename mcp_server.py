@@ -9,9 +9,7 @@ from response_builder import build_response
 engine = IntentEngine()
 
 # 2. Initialize the Official FastMCP Server
-# We explicitly set host="0.0.0.0" to prevent "Invalid Host header" errors.
-# We also explicitly force sse_path="/mcp" to meet Smithery's exact requirements.
-mcp = FastMCP("Bridge AI MCP Server", host="0.0.0.0", sse_path="/mcp")
+mcp = FastMCP("Bridge AI MCP Server")
 
 # 3. Define the single tool exposed to the Agent
 @mcp.tool()
@@ -30,7 +28,8 @@ async def bridge_ai_sales_assistant(query: str) -> str:
     return json.dumps(result)
 
 # 4. Generate the bulletproof ASGI application directly from FastMCP
-fastmcp_app = mcp.sse_app()
+# streamable_http_app natively creates a route exactly at /mcp configured to handle POST
+fastmcp_app = mcp.streamable_http_app()
 
 from fastapi import FastAPI
 app = FastAPI(title="Bridge AI Dedicated MCP Server")
@@ -38,9 +37,10 @@ app = FastAPI(title="Bridge AI Dedicated MCP Server")
 @app.get("/")
 def root_health_check():
     """Railway requires a successful 200 response on the root URL to not crash."""
-    return {"status": "online", "message": "Bridge AI MCP Server running. Endpoint strictly locked to /mcp"}
+    return {"status": "online", "message": "Bridge AI MCP Server running in HTTP mode. Endpoint strictly locked to /mcp"}
 
 # Mount the MCP server onto the FastAPI root
+# Since streamable_http_app creates a `/mcp` route inside itself, mounting to `/` makes it `/mcp`.
 app.mount("/", fastmcp_app)
 
 if __name__ == "__main__":
