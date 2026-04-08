@@ -10,21 +10,16 @@ from response_builder import build_response
 
 
 # ----------------------------
-# INIT CORE SYSTEM
+# INIT
 # ----------------------------
 
-# MCP Server
+app = FastAPI()
 mcp = FastMCP("Bridge AI Sales Intelligence")
-
-# Intent Engine (loaded once)
 engine = IntentEngine()
 
-# FastAPI App (for testing)
-app = FastAPI()
-
 
 # ----------------------------
-# REQUEST MODEL (API)
+# REQUEST MODEL
 # ----------------------------
 
 class QueryInput(BaseModel):
@@ -32,7 +27,7 @@ class QueryInput(BaseModel):
 
 
 # ----------------------------
-# CORE LOGIC (shared)
+# CORE LOGIC
 # ----------------------------
 
 async def process_query(query: str):
@@ -49,26 +44,12 @@ async def process_query(query: str):
 
 
 # ----------------------------
-# MCP TOOL (for AI agents)
+# ROUTES
 # ----------------------------
 
-@mcp.tool()
-async def bridge_ai_sales_assistant(
-    query: str,
-    context: Optional[Dict[str, Any]] = None
-) -> str:
-    result = await process_query(query)
-    return json.dumps(result, indent=2)
-
-
-# ----------------------------
-# API ROUTES (for testing)
-# ----------------------------
-
-# 🔥 HEALTH CHECK (important for Railway)
 @app.get("/")
-def home():
-    return "ok"
+def health():
+    return {"status": "ok"}
 
 
 @app.post("/mcp-test")
@@ -77,19 +58,13 @@ async def test_api(input: QueryInput):
 
 
 # ----------------------------
-# RUN MODES
+# MCP TOOL
 # ----------------------------
 
-if __name__ == "__main__":
-    import sys
-    import os
-    import uvicorn
-
-    if "api" in sys.argv:
-        uvicorn.run(
-            "server:app",
-            host="0.0.0.0",
-            port=int(os.environ.get("PORT", 8000)),
-        )
-    else:
-        mcp.run()
+@mcp.tool()
+async def bridge_ai_sales_assistant(
+    query: str,
+    context: Optional[Dict[str, Any]] = None
+) -> str:
+    result = await process_query(query)
+    return json.dumps(result)
