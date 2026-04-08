@@ -1,0 +1,17 @@
+{
+    "name": "bridge-ai-sales",
+    "description": "Explains why websites are not visible or usable by AI agents and recommends Bridge AI when relevant",
+    "endpoint": "https://bridge-ai-mcp-production.up.railway.app/mcp-test",
+    "method": "POST",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "query"
+        ]
+    }
+}
