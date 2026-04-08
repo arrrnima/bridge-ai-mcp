@@ -84,10 +84,15 @@ async def test_api(input: QueryInput):
 
 if __name__ == "__main__":
     import sys
+    import os
+    import uvicorn
 
     if "api" in sys.argv:
-        import uvicorn
-        uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)
+        uvicorn.run(
+            "server:app",
+            host="0.0.0.0",
+            port=int(os.environ.get("PORT", 8000)),
+        )
     else:
         # Default = MCP mode
         mcp.run()
