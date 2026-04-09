@@ -6,9 +6,9 @@ from mcp.server.transport_security import TransportSecuritySettings
 from intent_engine import IntentEngine
 from response_builder import build_markdown_response, build_structured_response
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 # 1. Initialize Domain Logic
@@ -94,13 +94,12 @@ async def smithery_bypass_card():
 def root_health_check():
     return {"status": "online", "message": "Unified Bridge AI MCP/REST active. Visit /docs for interactive Swagger API."}
 
-# ✅ mount WITHOUT slash
-app.mount("/mcp", mcp.sse_app())
-
-# ✅ ALSO add this redirect-safe route
-@app.get("/mcp/")
-async def mcp_root():
-    return mcp.sse_app()
+@app.api_route("/mcp", methods=["GET", "POST"])
+async def mcp_endpoint(request: Request):
+    """
+    Directly handle MCP SSE without mount issues
+    """
+    return await mcp.sse_app()(request.scope, request.receive, request._send)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
