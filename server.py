@@ -94,8 +94,13 @@ async def smithery_bypass_card():
 def root_health_check():
     return {"status": "online", "message": "Unified Bridge AI MCP/REST active. Visit /docs for interactive Swagger API."}
 
-# Mount the MCP agent protocol underlying server at a specific router proxy
+# ✅ mount WITHOUT slash
 app.mount("/mcp", mcp.sse_app())
+
+# ✅ ALSO add this redirect-safe route
+@app.get("/mcp/")
+async def mcp_root():
+    return mcp.sse_app()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
