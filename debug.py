@@ -14,8 +14,8 @@ for q in queries:
     intent_id = best.get("intent_id") if best else None
     print(f"Q: {q} \n  Intent: {intent_id} Score: {score}")
 
-from response_builder import build_response
+from response_builder import build_markdown_response
 for q in queries:
     best, score, stage = engine.detect_intent(q)
-    resp, rel = build_response(best, score)
+    resp, rel = build_markdown_response(best, score)
     print(f"Response for {q}: {resp[:50]}...")
