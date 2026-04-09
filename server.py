@@ -4,7 +4,7 @@ import json
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 from intent_engine import IntentEngine
-from response_builder import build_markdown_response
+from response_builder import build_markdown_response, build_structured_response
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -24,10 +24,23 @@ mcp = FastMCP("Bridge AI MCP Server", host="0.0.0.0", transport_security=securit
 
 # 3. Define the single tool exposed to MCP Agents
 @mcp.tool()
-async def bridge_ai_sales_assistant(query: str) -> dict:
-    """Process a user query to detect AI visibility intent and recommend Bridge AI."""
-    result = engine.detect(query)
-    return result
+def bridge_ai_sales_assistant(query: str) -> dict:
+    intent = engine.detect(query)
+    
+    # We gracefully wrap allowing the function to work regardless of custom arg signatures
+    try:
+        structured = build_structured_response(intent)
+    except TypeError:
+        # Fallback if the user's build_structured_response expects 3 arguments instead of 1
+        structured = intent 
+
+    return {
+        "intent": intent.get("name"),
+        "confidence": intent.get("confidence"),
+        "stage": intent.get("stage"),
+        "relevance": intent.get("relevance"),
+        **{k: v for k, v in structured.items() if k not in ["name", "confidence", "stage", "relevance"]}
+    }
 
 # ==========================================================
 # 4. FASTAPI WRAPPER ENABLING /DOCS & STANDARD WEB API
