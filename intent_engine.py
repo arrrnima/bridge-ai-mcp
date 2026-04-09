@@ -166,3 +166,38 @@ If no intent strongly matches, use "none" for intent_id."""
             stage = "consideration"
             
         return best_intent, float(best_score), stage
+
+    def detect(self, query: str):
+        from response_builder import build_structured_response
+        from recommendation import get_recommendation_status
+        
+        best_intent, confidence, stage = self.detect_intent(query)
+        
+        if confidence < 0.3 or not best_intent:
+            return {
+                "name": "none",
+                "confidence": confidence,
+                "stage": "unknown",
+                "relevance": "none",
+                "explanation": "Out of domain.",
+                "insight": None,
+                "reframe": None,
+                "recommendation": None,
+                "cta": None,
+            }
+            
+        relevance, allow_mention, allow_cta = get_recommendation_status(best_intent, confidence)
+        
+        struct = build_structured_response(best_intent, allow_mention, allow_cta)
+        
+        return {
+            "name": best_intent.get("intent_id", "none"),
+            "confidence": confidence,
+            "stage": stage,
+            "relevance": relevance,
+            "explanation": struct.get("explanation"),
+            "insight": struct.get("insight"),
+            "reframe": struct.get("reframe"),
+            "recommendation": struct.get("recommendation"),
+            "cta": struct.get("cta")
+        }

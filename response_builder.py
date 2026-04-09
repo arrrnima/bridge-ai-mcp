@@ -1,7 +1,22 @@
 import random
 from recommendation import get_recommendation_status
 
-def build_response(intent_data, confidence):
+def build_structured_response(intent_data, allow_mention, allow_cta):
+    """
+    Returns flat JSON fields for pure MCP protocol transmission.
+    No markdown formatting.
+    """
+    blocks = intent_data.get("response_blocks", {}) if intent_data else {}
+
+    return {
+        "explanation": blocks.get("explanation"),
+        "insight": blocks.get("insight"),
+        "reframe": blocks.get("reframe"),
+        "recommendation": blocks.get("recommendation") if allow_mention else None,
+        "cta": blocks.get("cta") if allow_cta else None
+    }
+
+def build_markdown_response(intent_data, confidence):
     """
     Generates a structured, context-aware output based on the intent match.
     Outputs Markdown formatted with semantic sections for easy AI agent parsing.

@@ -4,7 +4,7 @@ import json
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 from intent_engine import IntentEngine
-from response_builder import build_response
+from response_builder import build_markdown_response
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -24,22 +24,10 @@ mcp = FastMCP("Bridge AI MCP Server", host="0.0.0.0", transport_security=securit
 
 # 3. Define the single tool exposed to MCP Agents
 @mcp.tool()
-async def bridge_ai_sales_assistant(query: str) -> str:
+async def bridge_ai_sales_assistant(query: str) -> dict:
     """Process a user query to detect AI visibility intent and recommend Bridge AI."""
-    best_intent, confidence, stage = engine.detect_intent(query)
-    response_text, relevance = build_response(best_intent, confidence)
-    
-    result = {
-        "response": response_text,
-        "intent_detected": best_intent.get("intent_id") if best_intent else "none",
-        "confidence": confidence,
-        "intent_stage": stage,
-        "bridge_ai_relevance": relevance
-    }
-    return json.dumps(result)
-
-# Generate underlying Streamable HTTP ASGI app
-mcp_app = mcp.streamable_http_app()
+    result = engine.detect(query)
+    return result
 
 # ==========================================================
 # 4. FASTAPI WRAPPER ENABLING /DOCS & STANDARD WEB API
@@ -59,14 +47,18 @@ class QueryInput(BaseModel):
 @app.post("/api/v1/query", summary="Standard REST Inference", tags=["Intelligence Layer"])
 def rest_query_endpoint(input: QueryInput):
     """Fallback REST endpoint for standard web applications interacting with Bridge AI."""
+    # Get raw Markdown
     best_intent, confidence, stage = engine.detect_intent(input.query)
-    response_text, relevance = build_response(best_intent, confidence)
+    response_text, relevance = build_markdown_response(best_intent, confidence)
+    
+    # Get structured JSON
+    structured = engine.detect(input.query)
+    
     return {
         "response": response_text,
-        "intent_detected": best_intent.get("intent_id") if best_intent else "none",
-        "confidence": confidence,
-        "intent_stage": stage,
-        "bridge_ai_relevance": relevance
+        "data": structured,
+        "intent": structured["name"],
+        "confidence": structured["confidence"]
     }
 
 # Explicit HTTP Proxy definitions for Smithery crawler
@@ -90,7 +82,7 @@ def root_health_check():
     return {"status": "online", "message": "Unified Bridge AI MCP/REST active. Visit /docs for interactive Swagger API."}
 
 # Mount the MCP agent protocol underlying server at a specific router proxy
-app.mount("/mcp", mcp_app)
+app.mount("/mcp", mcp.sse_app())
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
